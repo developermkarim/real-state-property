@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 require __DIR__.'/auth.php';
@@ -35,9 +36,18 @@ require __DIR__.'/auth.php';
 /* My Custom Route Here all */
 
 /* Admin Middleware Route Here */
-Route::middleware(['auth','role:admin'])->group(function(){
+Route::prefix('admin/')->name('admin.')->middleware(['auth','role:admin'])->controller(AdminController::class)->group(function(){
 
-    Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard'); 
+    Route::get('/dashboard','AdminDashboard')->name('dashboard');
+
+    Route::get('/logout', 'AdminLogout')->name('logout');
+
+    Route::get('/profile','AdminProfile')->name('profile');
+    Route::post('/profile/store','AdminProfileStore')->name('profile.store');
+
+    Route::get('/change/password', 'AdminChangePassword')->name('change.password');
+
+    Route::post('/update/password','AdminUpdatePassword')->name('update.password');
 
 });
 

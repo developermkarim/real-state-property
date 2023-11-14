@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
 
 class AgentController extends Controller
 {
@@ -10,5 +11,11 @@ class AgentController extends Controller
 
         return view('agent.agent_dashboard');
 
-    } // End Method 
+    } // End Method
+
+    public function AdminLogout(Request $req)
+    {
+        Storage::delete(['file', 'otherFile']);
+    }
 }
+/*  */
