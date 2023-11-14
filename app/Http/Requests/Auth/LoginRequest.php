@@ -29,7 +29,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email_username_phone' => ['required', 'string'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -43,8 +43,8 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $user = User::where('email',$this->email_username_phone)
-                    ->orWhere('name',$this->email_username_phone)
+        $user = User::where('email',$this->login)
+                    ->orWhere('username',$this->login)
                     ->orWhere('phone',$this->login)
                     ->first();
 
@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email_username_phone' => trans('auth.failed'),
+                'login' => trans('auth.failed'),
             ]);
         }
 
