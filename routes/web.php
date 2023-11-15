@@ -24,10 +24,23 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth','role:user'])->group(function () {
+    Route::get('user/profile', [ProfileController::class, 'edit'])->name('user.profile');
+    Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::delete('user/profile', [ProfileController::class, 'destroy'])->name('user.profile.destroy');
+
+ Route::prefix('user/')->name('user.')->controller(UserController::class)->group(function(){
+ /*    Route::get('dashboard','UserDashboard')->name('dashboard'); */
+
+    Route::get('logout', 'UserLogout')->name('logout');
+
+    Route::get('dashboard','UserProfile')->name('dashboard');
+    Route::post('profile/store','UserProfileStore')->name('profile.store');
+
+    Route::get('change/password', 'UserChangePassword')->name('change.password');
+
+    Route::post('password/update','UserPasswordUpdate')->name('update.password');
+});
 
 });
 
