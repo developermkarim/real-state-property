@@ -65,11 +65,30 @@ Route::prefix('admin/')->name('admin.')->middleware(['auth','role:admin'])->cont
 
 });
 
-/* Redirect To Dashboard after Login */
+/* Agent Middleware Route Here */
+
+Route::prefix('agent/')->name('agent.')->middleware(['auth','role:agent'])->controller(AgentController::class)->group(function(){
+
+    Route::get('dashboard','AgentDashboard')->name('dashboard');
+
+    Route::get('logout', 'AgentLogout')->name('logout');
+
+    Route::get('profile','AgentProfile')->name('profile');
+    Route::post('profile/store','AgentProfileStore')->name('profile.store');
+
+    Route::get('change/password', 'AgentChangePassword')->name('change.password');
+
+    Route::post('update/password','AgentUpdatePassword')->name('update.password');
+
+});
+
+/* Redirect To Dashboard after Login  Start */
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')->middleware(RedirectIfAuthenticated::class);
 
 Route::post('agent/register', [AgentController::class, 'AgentRegister'])->name('agent.register');
 
+/* Redirect To Dashboard after Login  End */
+Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
 
 /* Agent Middleware Route Here */
 Route::middleware(['auth','role:agent'])->group(function(){
