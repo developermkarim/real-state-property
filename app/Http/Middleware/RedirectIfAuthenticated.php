@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
             if(Auth::guard($guard)){
 
              if(Auth::check() && Auth::user()->role == 'user'){
-                return redirect('/dashboard');
+                return redirect('dashboard');
                 }
                 if(Auth::check() && Auth::user()->role == 'agent'){
                     return redirect('agent/dashboard');

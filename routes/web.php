@@ -91,6 +91,6 @@ Route::post('agent/register', [AgentController::class, 'AgentRegister'])->name('
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
 
 /* Agent Middleware Route Here */
-Route::middleware(['auth','role:agent'])->group(function(){
+/* Route::middleware(['auth','role:agent'])->group(function(){
 Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])->name('agent.dashboard');
-});
+}); */

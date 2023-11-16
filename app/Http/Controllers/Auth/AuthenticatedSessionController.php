@@ -27,8 +27,16 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $id = Auth::user()->id;
+        $adminData = User::find($id);
+        $username = $adminData->name;
+
         $request->session()->regenerate();
 
+        $notification = [
+            'message' => "User $username Login Successfully",
+            'alert-type' => 'info',
+        ];
 /*         return redirect()->intended(RouteServiceProvider::HOME); */
         $url = '';
         if ($request->user()->role === 'admin') {
@@ -36,9 +44,9 @@ class AuthenticatedSessionController extends Controller
         }elseif ($request->user()->role === 'agent') {
             $url = 'agent/dashboard';
         }elseif ($request->user()->role  === 'user') {
-            $url = '/dashboard';
+            $url = 'user/dashboard';
         }
-        return redirect()->intended($url);
+        return redirect()->intended($url)->with($notification);
     }
 
     /**

@@ -103,15 +103,11 @@ class UserController extends Controller
 
         ]);
 
-         $notification = array(
-            'message' => 'Password Change Successfully',
+        $notification = array(
+            'message' => 'User Logout Successfully',
             'alert-type' => 'success'
         );
-
-        return back()->with($notification);
-
-     }// End Method
-
+        return redirect('/login')->with($notification);
+    }// End Method
 
 }
- 
