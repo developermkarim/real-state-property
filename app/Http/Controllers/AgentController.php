@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+use App\Models\User;
 
 
 class AgentController extends Controller
@@ -25,39 +28,45 @@ class AgentController extends Controller
     public function AgentRegister(Request $request)
     {
 
-        $request->validate([
+       //  dd($request->all());
+       Log::info("Agent All Request Data " . $request->all());
+
+       $isRight =  $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            
+    'password' => ['required', 'confirmed', Password::defaults()],
+
         ]);
 
-        $data = new User();
-        $data->username = $request->username;
-        $data->name = $request->name;
-        $data->password = Hash::make($request->password);
-        $data->email = $request->email;
-        $data->phone = $request->phone;
-        $data->role = 'agent';
-        $data->address = $request->address;
 
+        // dd($isRight);
 
-        if ($request->file('photo')) {
-            $file = $request->file('photo');
-            @unlink(public_path('upload/agent_images/'.$data->photo));
-            $filename = date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('upload/agent_images'),$filename);
-            $data['photo'] = $filename;
-        }
+        Log::info("Agent Validation is Completed ");
 
-        $data->save();
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'role' => 'agent',
+            'status' => 'inactive',
+        ]);
+
+        // dd($user);
+
+        event(new Registered($user));
+
+        Auth::login($user);
 
         $notification = array(
             'message' => 'New Agent Successfully Registered',
             'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+          // Log the redirection
+          Log::info('Redirecting to ' . RouteServiceProvider::AGENT);
+
+        return redirect(RouteServiceProvider::AGENT)->with($notification);
     }
 
     public function agentProfile()

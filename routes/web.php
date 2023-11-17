@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AgentController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\PropertyTypeController;
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,7 +51,9 @@ require __DIR__.'/auth.php';
 /* My Custom Route Here all */
 
 /* Admin Middleware Route Here */
-Route::prefix('admin/')->name('admin.')->middleware(['auth','role:admin'])->controller(AdminController::class)->group(function(){
+Route::middleware(['auth','role:admin'])->group(function(){
+
+Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->group(function(){
 
     Route::get('/dashboard','AdminDashboard')->name('dashboard');
 
@@ -62,6 +65,29 @@ Route::prefix('admin/')->name('admin.')->middleware(['auth','role:admin'])->cont
     Route::get('/change/password', 'AdminChangePassword')->name('change.password');
 
     Route::post('/update/password','AdminUpdatePassword')->name('update.password');
+});
+
+ // Property Type All Route
+ Route::controller(PropertyTypeController::class)->group(function(){
+
+    Route::get('/all/type', 'AllType')->name('all.type');
+    Route::get('/add/type', 'AddType')->name('add.type');
+    Route::post('/store/type', 'StoreType')->name('store.type');
+    Route::get('/edit/type/{id}', 'EditType')->name('edit.type');
+    Route::post('/update/type', 'UpdateType')->name('update.type');
+    Route::get('/delete/type/{id}', 'DeleteType')->name('delete.type');
+
+    /* Amenities Here */
+
+    Route::get('/all/amenitie', 'AllAmenitie')->name('all.amenitie');
+    Route::get('/add/amenitie', 'AddAmenitie')->name('add.amenitie');
+    Route::post('/store/amenitie', 'StoreAmenitie')->name('store.amenitie');
+    Route::get('/edit/amenitie/{id}', 'EditAmenitie')->name('edit.amenitie');
+    Route::post('/update/amenitie', 'UpdateAmenitie')->name('update.amenitie');
+    Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')->name('delete.amenitie');
+
+});
+
 
 });
 
@@ -85,10 +111,10 @@ Route::prefix('agent/')->name('agent.')->middleware(['auth','role:agent'])->cont
 /* Redirect To Dashboard after Login  Start */
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')->middleware(RedirectIfAuthenticated::class);
 
-Route::post('agent/register', [AgentController::class, 'AgentRegister'])->name('agent.register');
+Route::post('/agent/register', [AgentController::class, 'AgentRegister'])->name('agent.register');
 
 /* Redirect To Dashboard after Login  End */
-Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
+Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login')->middleware(RedirectIfAuthenticated::class);
 
 /* Agent Middleware Route Here */
 /* Route::middleware(['auth','role:agent'])->group(function(){

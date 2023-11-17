@@ -19,13 +19,16 @@
                 </ul>
                 <div class="sign-box">
                     @auth
-                    <a href="{{ route('user.dashboard') }}"><i class="fas fa-user"></i>Dashboard</a>
-                    <a href="{{ route('user.logout') }}"><i class="fas fa-user"></i>Logout</a>
+                    @if (auth()->user()->role == 'user')
 
+                    <a href="{{ route('user.dashboard') }}"><i class="fas fa-user"></i>Dashboard</a>
+
+                    <a href="{{ route('user.logout') }}"><i class="fas fa-user"></i>Logout</a>
+                    @endif
                     @else
 
-
                     <a href="{{ route('login') }}"><i class="fas fa-user"></i>Sign In</a>
+
                     @endauth
 
                 </div>

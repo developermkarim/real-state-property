@@ -103,10 +103,10 @@ Agent Login | Easy RealEstate
                      <input type="password" name="password_confirmation" id="password_confirmation" required="">
                  </div>
 
-                 <div class="form-group">
+{{--                  <div class="form-group">
                      <label>addres</label>
                     <textarea name="address" id="address" placeholder="Write Address"></textarea>
-                 </div>
+                 </div> --}}
 
 
                  <div class="form-group message-btn">
