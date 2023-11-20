@@ -15,7 +15,7 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string ...$guards): Response
+/*     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
 
@@ -30,15 +30,46 @@ class RedirectIfAuthenticated
                     return redirect('agent/dashboard');
                 }
                 if (Auth::check() && Auth::user()->role == 'admin') {
+
                     return redirect('admin/dashboard');
                 }
-            }
 
-     //  return redirect(RouteServiceProvider::HOME);
+
+                // Redirect to admin login for 'admin/dashboard'
+                if ($request->routeIs('admin.dashboard')) {
+                    return redirect('admin/login');
+                }
+
+            }
 
 
         }
 
         return $next($request);
+    } */
+
+    public function handle(Request $request, Closure $next, string ...$guards): Response
+{
+    $guards = empty($guards) ? [null] : $guards;
+
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)) {
+            if (Auth::check() && Auth::user()->role == 'user') {
+                return redirect('dashboard');
+            } elseif (Auth::check() && Auth::user()->role == 'agent') {
+                return redirect('agent/dashboard');
+            } elseif (Auth::check() && Auth::user()->role == 'admin') {
+                // Redirect to admin login for 'admin/dashboard'
+                if ($request->routeIs('admin.dashboard')) {
+                    return redirect('admin/login');
+                }
+
+                return redirect('admin/dashboard');
+            }
+        }
     }
+
+    return $next($request);
+}
+
 }

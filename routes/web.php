@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AdminController;
@@ -85,6 +86,18 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     Route::get('/edit/amenitie/{id}', 'EditAmenitie')->name('edit.amenitie');
     Route::post('/update/amenitie', 'UpdateAmenitie')->name('update.amenitie');
     Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')->name('delete.amenitie');
+
+});
+
+ // State  All Route
+ Route::controller(StateController::class)->group(function(){
+
+    Route::get('/all/state', 'AllState')->name('all.state');
+    Route::get('/add/state', 'AddState')->name('add.state');
+    Route::post('/store/state', 'StoreState')->name('store.state');
+    Route::get('/edit/state/{id}', 'EditState')->name('edit.state');
+    Route::post('/update/state', 'UpdateState')->name('update.state');
+    Route::get('/delete/state/{id}', 'DeleteState')->name('delete.state');
 
 });
 
