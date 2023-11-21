@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageHelper{
 
-   public static function uploadAndOptimizeImage($request = null,$title = null,$fieldName = null,$storagePath,$deletingImage = null)
+   public static function uploadAndOptimizeImage($request,$title,$fieldName,$storagePath,$deletingImage = null)
     {
 
         if($request->hasFile($fieldName)){
@@ -17,14 +17,16 @@ class ImageHelper{
             $file = $request->file($fieldName);
             $filename = strtolower(str_replace([' ','.','_'],'-',$title)) . '-' . now()->format('his') . '.' . $file->extension();
             $file->move(public_path($storagePath), $filename);
+            $fullImagePath = "{$storagePath}/{$filename}";
 
     }else {
 
         $filename = $deletingImage;
+        $fullImagePath = "upload/no_image.jpg";
     }
 
     return [
-        'path' => "{$storagePath}/{$filename}",
+        'path' => $fullImagePath,
         'image' => $filename,
     ];
 

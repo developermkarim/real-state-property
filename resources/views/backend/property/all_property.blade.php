@@ -6,7 +6,7 @@
 
 				<nav class="page-breadcrumb">
 					<ol class="breadcrumb">
-	  <a href="{{ route('add.properties') }}" class="btn btn-inverse-info"> Add Property    </a>
+	  <a href="{{ route('add.property') }}" class="btn btn-inverse-info"> Add Property    </a>
 					</ol>
 				</nav>
 
@@ -48,8 +48,8 @@
 
                         </td>
                         <td>
-       <a href="{{ route('edit.properties',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
-       <a href="{{ route('delete.properties',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete  </a>
+       <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+       <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete  </a>
                         </td>
                       </tr>
                      @endforeach

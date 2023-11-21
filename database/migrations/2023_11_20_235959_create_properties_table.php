@@ -15,15 +15,16 @@ return new class extends Migration
             $table->id();
             $table->integer('ptype_id')->unsigned()->nullable();
             $table->unsignedBigInteger('amenities_id')->nullable();
+            $table->string('property_name');
             $table->string('property_slug')->unique();
             $table->string('property_code');
             $table->string('property_status');
             $table->decimal('lowest_price', 10, 2)->default(0.00)->nullable();
             $table->decimal('max_price',10,2)->default(0.00)->nullable();
-            $table->string('property_thumbnail');
+            $table->string('property_thambnail');
             $table->text('short_descp')->nullable();
             $table->text('long_descp')->nullable();
-            $table->string('bedromms', 100)->nullable();
+            $table->string('bedrooms', 100)->nullable();
             $table->string('bathrooms', 100)->nullable();
             $table->string('garage', 100)->nullable();
             $table->string('garage_size', 100)->nullable();
