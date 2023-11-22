@@ -113,6 +113,16 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     Route::post('/update/property', 'UpdateProperty')->name('update.property');
 
     Route::get('/delete/property/{id}', 'DeleteProperty')->name('delete.property');
+
+    Route::post('/update/image', 'UpdateImage')->name('update.image');
+
+    Route::post('/update/multi/image', 'UpdateMultiImage')->name('update.multi.image');
+
+    Route::post('/update/each-multi-image/{id}', 'UpdateEachMultiImage')->name('update.each.multi.image');
+
+    Route::get('/delete/each-multi-image/{id}', 'DeleteEachMultiImage')->name('delete.each.multi.image');
+
+
 });
 
 

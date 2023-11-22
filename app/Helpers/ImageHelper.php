@@ -12,6 +12,8 @@ class ImageHelper{
 
             if(file_exists(public_path($storagePath . '/' . $deletingImage))){
                 @unlink(public_path($storagePath . '/' . $deletingImage));
+            }elseif (file_exists(public_path($deletingImage))) {
+                @unlink(public_path($deletingImage));
             };
 
             $file = $request->file($fieldName);

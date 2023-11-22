@@ -39,11 +39,6 @@ class PropertyController extends Controller
     public function StoreProperty(Request $request)
     {
 
-      //  $imgArr = [];
-
-       // dd($imgArr);
-
-       // dd($request->amenities_id);
        $amenities = implode(",", $request->amenities_id);
 
        $pcode = IdGenerator::generate(['table'=>'properties','field'=>'property_code','length'=>5,'prefix'=>'PC']);
@@ -129,12 +124,90 @@ class PropertyController extends Controller
        return redirect('all/property')->with($nottification);
        // 	property_id	photo_name	created_at	updated_at
 
-
     } // end Methods
 
-
-    public function DeleteProperty($id)
+    public function EditProperty($id)
     {
-        
+        $properties = Property::find($id);
+        $propertytype = PropertyType::latest()->get();
+        $activeAgent = User::where(['status'=>'active'])->where('role','agent')->latest()->get();
+        $states = State::latest()->get();
+        $amenities = Amenities::latest()->get();
+        $multi_images = MultiImage::where('property_id',$id)->get();
+        $facilities = Facility::where('property_id',$properties->id)->select('facility_name','property_id','id')->get();
+
+        // dd($facilities);
+
+        return view('backend.property.edit_property',compact('properties','activeAgent','propertytype','states','amenities','multi_images','facilities'));
     }
+
+
+    public function UpdateImage(Request $request)
+    {
+        $propertImage = Property::findOrFail($request->property_id);
+
+        $storeImage = ImageHelper::uploadAndOptimizeImage($request,$request->property_name,'property_thambnail','upload/property/thambnail',$propertImage->property_thambnail);
+
+        $isUpdatedImage = Property::where('id',$request->property_id)->update([
+            'property_thambnail'=> $storeImage['path'],
+        ]);
+        if($isUpdatedImage){
+
+            $nottification = [
+                'message' => "New Property Added Successfully",
+                'alert-type' => 'success'
+             ];
+
+           }
+
+           return redirect()->back()->with($nottification);
+    }
+
+    public function UpdateMultiImage(Request $request)
+    {
+        $multi_images = $request->multi_img;
+        if(!$request->hasFile('multi_img')){
+            $nottification = [
+                'message' => "Image Can't be Empty",
+                'alert-type' => 'warning'
+             ];
+
+             return redirect()->back()->with($nottification);
+
+           }else {
+
+        foreach ($multi_images as $key_id => $image) {
+
+            $each_multi_image = MultiImage::findOrFail($key_id);
+
+            if (file_exists(public_path($each_multi_image->photo_name))) {
+                @unlink(public_path($each_multi_image->photo_name));
+            }
+
+            $file_extenion = strtolower($image->extension());
+            $filename = strtolower(str_replace([' ','_','.'],'-',$request->property_name)) . '-' . now()->format('his') . $key_id . '.' . $file_extenion;
+
+            Image::make($image)->resize(750,520)->save(public_path('upload/property/multi-image/' . $filename));
+            $fileStorage = 'upload/property/multi-image/' . $filename;
+            $isUpdatedImage = MultiImage::where('id',$key_id)->update([
+                'photo_name'=> $fileStorage,
+            ]);
+            if($isUpdatedImage){
+
+                $nottification = [
+                    'message' => "New Property Added Successfully",
+                    'alert-type' => 'success'
+                 ];
+
+               }
+
+        }
+
+
+    }
+
+        return redirect()->back()->with($nottification);
+
+    }
+
 }
