@@ -129,6 +129,9 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
 
     Route::post('/store/new-multi-image/{id}', 'StoreNewMultiImage')->name('new.multi.image');
 
+    /* Status Of Property */
+    Route::get('/status/property/{property_id}', 'StatusProperty')->name('status.property');
+
 });
 
 

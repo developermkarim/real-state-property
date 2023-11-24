@@ -379,4 +379,27 @@ class PropertyController extends Controller
 
     }
 
+    public function StatusProperty($id)
+    {
+        // return $id;
+        $property_id = $id;
+        $property = Property::where('id',$id)->select('status')->first();
+        // return $property->status;
+        if($property->status == '0'){
+            $property_update = Property::find($property_id)->update([
+                'status' => '1',
+            ]);
+            $message = "This Property is currently active";
+        }else if($property->status == '1'){
+            $property_update = Property::find($property_id)->update([
+                'status' => '0',
+            ]);
+            $message = "Your Property has been deactivated";
+        }
+
+        if (!empty($property_update)) {
+            return response()->json(['success'=>$message], 200);
+        }
+    }
+
 }
