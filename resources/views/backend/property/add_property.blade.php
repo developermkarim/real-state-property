@@ -16,13 +16,12 @@
        <div class="card">
     <div class="card-body">
         <h6 class="card-title">Add Property </h6>
-            <form method="POST" action="{{ route('store.property') }}" enctype="multipart/form-data">
+<form method="POST" id="myForm" action="{{ route('store.property') }}" enctype="multipart/form-data">
                 @csrf
-{{--                 <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
 
     <div class="row">
         <div class="col-sm-6">
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 <label class="form-label">Property Name </label>
                 <input type="text" name="property_name" class="form-control"  >
             </div>
@@ -58,7 +57,7 @@
          <div class="col-sm-6">
             <div class="mb-3">
                 <label class="form-label">Main Thambnail </label>
-                <input type="file" name="property_thambnail " class="form-control" onChange="mainThamUrl(this)"  >
+                <input type="file" name="property_thambnail" class="form-control" onChange="mainThamUrl(this)">
 
                 <img src="" id="mainThmb">
 
@@ -386,59 +385,146 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function (){
-        $('#myForm').validate({
-            rules: {
-                property_name: {
-                    required : true,
-                },
-                 property_status: {
-                    required : true,
-                },
-                 lowest_price: {
-                    required : true,
-                },
-                 max_price: {
-                    required : true,
-                },
-                 ptype_id: {
-                    required : true,
-                },
+$(document).ready(function () {
+    $('#myForm').validate({
+        rules: {
+            property_name: {
+                required: true,
+            },
+            property_status: {
+                required: true,
+            },
+            lowest_price: {
+                required: true,
+            },
+            max_price: {
+                required: true,
+            },
+            ptype_id: {
+                required: true,
+            },
+            bedrooms: {
+                required: true,
+            },
+            bathrooms: {
+                required: true,
+            },
+            garage: {
+                required: true,
+            },
+            garage_size: {
+                required: true,
+            },
+            address: {
+                required: true,
+            },
+            city: {
+                required: true,
+            },
+            state: {
+                required: true,
+            },
+            postal_code: {
+                required: true,
+            },
+            property_size: {
+                required: true,
+            },
+            latitude: {
+                required: true,
+            },
+            longitude: {
+                required: true,
+            },
+            property_video: {
+                required: true,
+            },
+            neighborhood: {
+                required: true,
+            },
+            short_descp: {
+                required: true,
+            },
+            long_descp: {
+                required: true,
+            },
+        },
+        messages: {
+            property_name: {
+                required: 'Please enter the property name',
+            },
+            property_status: {
+                required: 'Please select the property status',
+            },
+            lowest_price: {
+                required: 'Please enter the lowest price',
+            },
+            max_price: {
+                required: 'Please enter the maximum price',
+            },
+            ptype_id: {
+                required: 'Please select the property type',
+            },
+            bedrooms: {
+                required: 'Please enter the number of bedrooms',
+            },
+            bathrooms: {
+                required: 'Please enter the number of bathrooms',
+            },
+            garage: {
+                required: 'Please enter the garage information',
+            },
+            garage_size: {
+                required: 'Please enter the garage size',
+            },
+            address: {
+                required: 'Please enter the property address',
+            },
+            city: {
+                required: 'Please enter the city',
+            },
+            state: {
+                required: 'Please enter the state',
+            },
+            postal_code: {
+                required: 'Please enter the postal code',
+            },
+            property_size: {
+                required: 'Please enter the property size',
+            },
+            latitude: {
+                required: 'Please enter the latitude',
+            },
+            longitude: {
+                required: 'Please enter the longitude',
+            },
+            property_video: {
+                required: 'Please enter the property video information',
+            },
+            neighborhood: {
+                required: 'Please enter the neighborhood information',
+            },
+            short_descp: {
+                required: 'Please enter a short description',
+            },
+            long_descp: {
+                required: 'Please enter a long description',
+            },
+        },
 
-
-            },
-            messages :{
-                property_name: {
-                    required : 'Please Enter Property Name',
-                },
-                 property_status: {
-                    required : 'Please Select Property Status',
-                },
-                lowest_price: {
-                    required : 'Please Enter Lowest Price',
-                },
-                max_price: {
-                    required : 'Please Enter Max Price',
-                },
-                ptype_id: {
-                    required : 'Please Select Property Type',
-                },
-
-
-            },
-            errorElement : 'span',
-            errorPlacement: function (error,element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight : function(element, errorClass, validClass){
-                $(element).addClass('is-invalid');
-            },
-            unhighlight : function(element, errorClass, validClass){
-                $(element).removeClass('is-invalid');
-            },
-        });
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
     });
+});
 
 </script>
 

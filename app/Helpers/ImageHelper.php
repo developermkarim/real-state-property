@@ -34,10 +34,12 @@ class ImageHelper{
 
 }
 
-    public static function DeleteImage($storagePath,$filename)
+    public static function DeleteImage($storagePath = null,$filename = null)
     {
         if(file_exists(public_path("$storagePath/$filename"))){
             unlink(public_path("$storagePath/$filename"));
+        }elseif (file_exists(public_path($filename))) {
+            unlink(public_path($filename));
         }
     }
 

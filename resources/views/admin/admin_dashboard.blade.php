@@ -40,27 +40,27 @@
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
   <!-- endinject -->
 
-  <!-- Layout styles -->  
+  <!-- Layout styles -->
   <link rel="stylesheet" href="{{ asset('backend/assets/css/demo2/style.css') }}">
   <!-- End layout styles -->
 
   <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" />
 
    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
- 
 
- 
+@stack('css-style')
+
 </head>
 <body>
   <div class="main-wrapper">
 
     <!-- partial:partials/_sidebar.html -->
     @include('admin.body.sidebar')
-  
+
     <!-- partial -->
-  
+
     <div class="page-wrapper">
-          
+
       <!-- partial:partials/_navbar.html -->
      @include('admin.body.header')
       <!-- partial -->
@@ -70,7 +70,7 @@
       <!-- partial:partials/_footer.html -->
     @include('admin.body.footer')
       <!-- partial -->
-    
+
     </div>
   </div>
 
@@ -112,9 +112,9 @@
 
     case 'error':
     toastr.error(" {{ Session::get('message') }} ");
-    break; 
+    break;
  }
- @endif 
+ @endif
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -123,7 +123,7 @@
 
   <!-- Start datatables -->
   <script src="{{ asset('backend/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
-  <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script> 
+  <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
   <script src="{{ asset('backend/assets/js/data-table.js') }}"></script>
   <!-- End datatables -->
 
@@ -151,4 +151,4 @@
 
 
 </body>
-</html>    
+</html>

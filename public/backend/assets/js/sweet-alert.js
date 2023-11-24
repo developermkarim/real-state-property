@@ -59,9 +59,9 @@ $(function() {
         },
         buttonsStyling: false,
       })
-      
+
       swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
+        title: 'Are you sure de?',
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
@@ -133,7 +133,7 @@ $(function() {
         timer: 3000,
         timerProgressBar: true,
       });
-      
+
       Toast.fire({
         icon: 'success',
         title: 'Signed in successfully'
