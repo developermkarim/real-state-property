@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
@@ -147,7 +148,7 @@ class PropertyController extends Controller
         $property_id = $request->property_id;
       //  dd($amenities);
         $amenities_str = implode("," , $request->amenities_id);
-      
+
         $properties = Property::findOrFail($property_id);
 
         $pcode ='';
@@ -157,9 +158,9 @@ class PropertyController extends Controller
         }else{
             $pcode = IdGenerator::generate(['table'=>'properties','field'=>'property_code','length'=>5,'prefix'=>'PC']);
         }
-        
+
         $update_property = Property::find($property_id)->update([
- 
+
          'ptype_id' => $request->ptype_id,
          'amenities_id' => $amenities_str,
          'property_name' => $request->property_name,
@@ -193,7 +194,7 @@ class PropertyController extends Controller
 
       //  dd($update_property);
       if (!empty($update_property)) {
-       
+
         $nottification = [
             'message'=>"Property Updated Successfully",
             'alert-type'=>'info',
@@ -213,25 +214,25 @@ class PropertyController extends Controller
             return redirect()->back();
          }else{
              Facility::where('property_id',$pid)->delete();
- 
-           $facilities = Count($request->facility_name); 
- 
-            for ($i=0; $i < $facilities; $i++) { 
+
+           $facilities = Count($request->facility_name);
+
+            for ($i=0; $i < $facilities; $i++) {
                 $fcount = new Facility();
                 $fcount->property_id = $pid;
                 $fcount->facility_name = $request->facility_name[$i];
                 $fcount->distance = $request->distance[$i];
                 $fcount->save();
-            } // end for 
+            } // end for
          }
- 
+
           $notification = array(
              'message' => 'Property Facility Updated Successfully',
              'alert-type' => 'success'
          );
- 
-         return redirect()->back()->with($notification); 
- 
+
+         return redirect()->back()->with($notification);
+
     }
 
 
@@ -399,7 +400,99 @@ class PropertyController extends Controller
 
         if (!empty($property_update)) {
             return response()->json(['success'=>$message], 200);
+        }else{
+            return response()->json(['error'=>"Something Went Wrong"], 404);
         }
     }
+
+    /* Move To Thrash of Property */
+
+    public function moveToThrash($pid)
+    {
+        $properties = Property::findOrFail($pid);
+
+            if($properties->delete()){
+
+        // Log a success message after successful deletion
+/*         Log::info("All properties temporarily deleted successfully",['storeImage'=>$properties->multi_images[0]->photo_name,"mainImage"=> $properties->property_thambnail]); */
+                return response()->json(['success'=>"This Property is Successfully Deleted"], 200);
+            } else {
+/*                 Log::error("Sorry, Property does not deleted and images"); */
+            return response()->json(['error'=>"Sorry, Data is not deleted."],500);
+        }
+
+
+    }
+
+    public function RecycleBin()
+    {
+        $bin_data = Property::onlyTrashed()->latest()->get();
+        
+        return view('backend.property.thrash_property',compact('bin_data'));
+    }
+
+    public function RestoreProperty($pid)
+    {
+       $properties = Property::withTrashed()->findOrFail($pid);
+        $multi_images = MultiImage::withTrashed()->where('property_id', $pid);
+      // dd($properties->restore());
+
+      if($properties->restore() && $multi_images->restore()){
+        return response()->json(['success'=>"$properties->property_name has been restored successfully"], 200);
+
+      }else {
+
+        return response()->json(['error'=>"$properties->property_name has been restored successfully"], 
+        500);
+
+      }
+
+    }
+
+    public function DeletePermanently($id)
+    {
+
+            \DB::listen(function ($query) {
+                \Log::info($query->sql);
+                \Log::info($query->bindings);
+                \Log::info($query->time);
+            });
+
+            
+            
+            $properties = DB::table('properties')->where('id', $id)->orWhere('id', $id)->first();
+            
+            if ($properties) {
+                $multi_images = DB::table('multi_images')
+                    ->where('property_id', $properties->id)
+                    ->orWhere('property_id', $id)
+                    ->get();
+            
+                if (!empty($properties->property_thambnail)) {
+                    ImageHelper::DeleteImage(null, $properties->property_thambnail);
+                }
+            
+                foreach ($multi_images as $key => $img) {
+                    ImageHelper::DeleteImage(null, $img->photo_name);
+                }
+            
+                // Manually delete associated child records using DB::table()
+                DB::table('multi_images')
+                    ->where('property_id', $properties->id)
+                    ->delete();
+            
+                // Now, delete the parent using DB::table()
+                DB::table('properties')
+                    ->where('id', $properties->id)
+                    ->delete();
+            
+                return response()->json(['message' => 'Records deleted successfully.']);
+            } else {
+                return response()->json(['error' => 'Property not found.'], 404);
+            }
+
+        }
+
+      
 
 }

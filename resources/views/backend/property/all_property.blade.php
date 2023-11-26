@@ -1,6 +1,22 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
+@push('css-style')
+
+    <!-- Include Bootstrap Toggle CSS -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <style>
+.swal2-popup.swal2-toast {
+  padding: 1.0em !important;
+  background: #111146 !important;
+}
+
+.toggle-handle {
+    background: #dbdbdc;
+}
+    </style>
+@endpush
+
 
 <div class="page-content">
 
@@ -41,11 +57,6 @@
                         <td>{{ $item->city }}</td>
 
                         <td>
-{{--                       @if($item->status == 1)
-                <button data-property_id="{{ $item->id }}" class=" btn badge rounded-pill bg-success property_status">Active</button>
-                      @else
-               <button data-property_id="{{ $item->id }}" class="btn badge rounded-pill bg-danger property_status">InActive</button>
-                      @endif --}}
                       <input
                             data-property_id="{{ $item->id }}"
                             class="toggle-class"
@@ -55,13 +66,12 @@
                             data-toggle="toggle"
                             data-on="Active"
                             data-off="Inactive"
-                            {{ $item->status == '1' ? 'checked' : '' }}
-                        >
+                            {{ $item->status == '1' ? 'checked' : '' }} >
                         </td>
 
                         <td>
        <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
-       <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete  </a>
+       <a data-property_id="{{ $item->id }}" id="delete-record" class="btn btn-inverse-danger delete-record"> Delete  </a>
                         </td>
                       </tr>
                      @endforeach
@@ -70,13 +80,16 @@
                 </div>
               </div>
             </div>
-					</div>
-				</div>
+		  </div>
+		</div>
+	</div>
 
-			</div>
+@push('js-script')
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
- {{-- <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap2-toggle.min.js"></script> --}}
+
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
     <script>
         $(document).ready(function(){
             $('.toggle-class').on('change',function(ev){
@@ -86,7 +99,7 @@
                 console.log(property_id);
                 var url = "{{ route('status.property',['property_id'=> ':property_id']) }}";
                 url = url.replace(':property_id' , property_id);
-                
+
                 console.log(url);
 
                 $.ajax({
@@ -95,7 +108,7 @@
                     success:function(response){
                         console.log(response);
                         if (response.hasOwnProperty('success')) {
-                            
+
                         const Toast = Swal.mixin({
                             toast: true,
                             position: "top-end",
@@ -103,8 +116,8 @@
                             timer: 3000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
                             }
                             });
                             Toast.fire({
@@ -112,28 +125,82 @@
                             title: response.success
                             });
 
+                    }else if(response.hasOwnProperty('error')){
+                    var errorMessage = response.error;
+                    alert(errorMessage);
                     }
                 }
 
                 })
             })
-           
+
+
+        /* Delete Record With Ajax */
+        $('.delete-record').on('click', function (ev) {
+            ev.preventDefault();
+            var deleteData = $(this);
+            var property_id = $(this).data('property_id');
+
+            console.log(property_id);
+
+            var url = "{{ route('property.thrash',['pid'=>':property_id']) }}";
+            url = url.replace(':property_id', property_id);
+            console.log(url);
+            console.log(deleteData);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Delete This Data?',
+                icon: 'warning',
+                color: '#000000',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function (response) {
+                            console.log(response);
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Deleted",
+                                    text: response.success,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                 deleteData.parent().parent('tr').remove();
+                                if (response.error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Unable to delete",
+                                    text: response.error,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                });
+
+                              }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText.message);
+                            Swal.fire({
+                                title: "Oops...",
+                                text:message,
+                                icon: "error"
+                            });
+                        }
+                    });
+
+                }
+
+            });
+
         })
+    })
+</script>
 
-    </script>
-
-@push('css-style')
-    <!-- Include Bootstrap Toggle CSS -->
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
-    <style>
-.swal2-popup.swal2-toast {
-  padding: 1.0em !important;
-  background: #111146 !important;
-}
-
-.toggle-handle {
-    background: #dbdbdc;
-}
-    </style>
 @endpush
+
 @endsection

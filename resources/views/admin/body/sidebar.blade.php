@@ -95,6 +95,22 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#property-thrash" role="button" aria-expanded="false" aria-controls="emails">
+          <i class="link-icon" data-feather="trash-2"></i>
+          <span class="link-title"> Recycle Bin </span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+        <div class="collapse" id="property-thrash">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('property.thrash.data') }}" class="nav-link">Property Bin Data</a>
+            </li>
+
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item">
         <a href="pages/apps/chat.html" class="nav-link">
           <i class="link-icon" data-feather="message-square"></i>
           <span class="link-title">Chat</span>

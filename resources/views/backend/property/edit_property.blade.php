@@ -475,7 +475,7 @@
                                     <tbody>
 
 
-                                        @foreach($multi_images as $img)
+                                        @foreach($properties['multi_images'] as $img)
                                         <td>{{ ++$loop->index }}</td>
                                         <td class="py-1">
                                             <img src="{{ asset($img->photo_name) }}" alt="image"

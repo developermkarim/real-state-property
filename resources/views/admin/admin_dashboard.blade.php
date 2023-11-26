@@ -147,8 +147,8 @@
      <script src="{{ asset('backend/assets/js/tinymce.js') }}"></script>
  <!-- tinymce -->
 
-  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+ @stack('js-script')
 
 </body>
 </html>

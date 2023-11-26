@@ -132,6 +132,17 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     /* Status Of Property */
     Route::get('/status/property/{property_id}', 'StatusProperty')->name('status.property');
 
+        /* Move To Thrash */
+ Route::get('/property/thrash/{pid}','moveToThrash')->name('property.thrash');
+
+    /* view Thrash Data */
+    Route::get('/property/thrash-data','RecycleBin')->name('property.thrash.data');
+
+    /* Restore Trashed Data */
+    Route::get('/property/restore-data/{pid}','RestoreProperty')->name('restore.property');
+
+    Route::get('/products/delete-permanently/{id}', 'DeletePermanently')->name('property.deleteParmanently');
+
 });
 
 
