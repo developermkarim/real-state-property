@@ -67,6 +67,23 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     Route::get('/change/password', 'AdminChangePassword')->name('change.password');
 
     Route::post('/update/password','AdminUpdatePassword')->name('update.password');
+
+});
+
+Route::controller(AdminController::class)->group(function () {
+
+        /* Agent Manage Here */
+    Route::get('agent/all','AllAgent')->name('all.agent');
+
+    Route::get('agent/add','AddAgent')->name('add.agent');
+
+    Route::post('agent/store', 'StoreAgent')->name('store.agent');
+
+    Route::get('agent/edit/{id}','EditAgent')->name('edit.agent');
+
+    Route::get('agent/delete/{id}','DeleteAgent')->name('delete.agent');
+
+    Route::post('agent/status','ChangeStatus')->name('agent.status');
 });
 
  // Property Type All Route
@@ -141,7 +158,10 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     /* Restore Trashed Data */
     Route::get('/property/restore-data/{pid}','RestoreProperty')->name('restore.property');
 
-    Route::get('/products/delete-permanently/{id}', 'DeletePermanently')->name('property.deleteParmanently');
+    Route::get('/property/delete-permanently/{id}', 'DeletePermanently')->name('property.deleteParmanently');
+
+    /* Show Property */
+    Route::get('/property/show-property/{pid}', 'ShowPropertyDetails')->name('property.show');
 
 });
 
@@ -175,6 +195,8 @@ Route::post('/agent/register', [AgentController::class, 'AgentRegister'])->name(
 /* Redirect To Dashboard after Login  End */
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login')->middleware(RedirectIfAuthenticated::class);
 
+
+/* Agent Management By Admin Here */
 /* Agent Middleware Route Here */
 /* Route::middleware(['auth','role:agent'])->group(function(){
 Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])->name('agent.dashboard');

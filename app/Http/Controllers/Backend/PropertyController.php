@@ -31,9 +31,9 @@ class PropertyController extends Controller
     {
         $propertytype = PropertyType::latest()->get();
         $activeAgent = User::where(['status'=>'active'])->where('role','agent')->latest()->get();
-        $states = State::latest()->get();
+        $pstate = State::latest()->get();
         $amenities = Amenities::latest()->get();
-        return view('backend.property.add_property',compact('activeAgent','propertytype','states','amenities'));
+        return view('backend.property.add_property',compact('activeAgent','propertytype','pstate','amenities'));
 
     } // End Method
 
@@ -415,10 +415,10 @@ class PropertyController extends Controller
 
         // Log a success message after successful deletion
 /*         Log::info("All properties temporarily deleted successfully",['storeImage'=>$properties->multi_images[0]->photo_name,"mainImage"=> $properties->property_thambnail]); */
-                return response()->json(['success'=>"This Property is Successfully Deleted"], 200);
+                return response()->json(['success'=>"This Property is Successfully Move to Trash"], 200);
             } else {
 /*                 Log::error("Sorry, Property does not deleted and images"); */
-            return response()->json(['error'=>"Sorry, Data is not deleted."],500);
+            return response()->json(['error'=>"Sorry, Data is not Trashed."],500);
         }
 
 
@@ -428,7 +428,7 @@ class PropertyController extends Controller
     {
         $bin_data = Property::onlyTrashed()->latest()->get();
         
-        return view('backend.property.thrash_property',compact('bin_data'));
+        return view('backend.property.trash_property',compact('bin_data'));
     }
 
     public function RestoreProperty($pid)
@@ -458,7 +458,7 @@ class PropertyController extends Controller
                 \Log::info($query->time);
             });
 
-            
+
             
             $properties = DB::table('properties')->where('id', $id)->orWhere('id', $id)->first();
             
@@ -494,5 +494,17 @@ class PropertyController extends Controller
         }
 
       
+        /* Property Show */
+
+        public function ShowPropertyDetails($pid)
+        {
+            $property = Property::findOrFail($pid);
+            $amenities = Amenities::latest()->get();
+
+            //dd($property->propertyType->type_name);
+           // dd($property->pstate);
+
+            return view('backend.property.show_property',compact('property','amenities'));
+        }
 
 }

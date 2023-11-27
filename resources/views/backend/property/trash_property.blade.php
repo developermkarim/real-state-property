@@ -68,9 +68,9 @@
 
         <a href="{{-- {{ route('details.property',$item->id) }} --}}" class="btn btn-inverse-info" title="Details"> <i data-feather="eye"></i> </a>
 
-       <a class="btn btn-inverse-warning restore-data" data-property_id="{{ $item->id }}" title="Restore"> <i data-feather="skip-back"></i> </a>
+       <a class="btn btn-inverse-warning restore-data" data-property_id="{{ $item->id }}" title="Restore"><i style='font-size:22px' class='fas fa-trash-restore-alt'></i></a>
 
-       <a class="btn btn-inverse-danger property-delete-parmanently" data-delete_parmanent_id="{{ $item->id }}" title="Delete"> <i data-feather="trash-2"></i>  </a>
+       <a class="btn btn-inverse-danger property-delete-parmanently" data-delete_parmanent_id="{{ $item->id }}" title="Delete"> delete forever  </a>
                         </td> 
                       </tr>
                      @endforeach

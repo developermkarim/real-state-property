@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+// use App\Http\Controllers\Controller;
 
 
 class AgentController extends Controller

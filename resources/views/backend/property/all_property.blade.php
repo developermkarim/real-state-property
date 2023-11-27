@@ -70,8 +70,14 @@
                         </td>
 
                         <td>
-       <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
-       <a data-property_id="{{ $item->id }}" id="delete-record" class="btn btn-inverse-danger delete-record"> Delete  </a>
+
+       <a href="{{ route('property.show', $item->id) }}" class="btn btn-inverse-info" title="Details"> <i data-feather="eye"></i> </a>
+
+       <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning restore-data" data-property_id="{{ $item->id }}" title="Restore"> <i data-feather="edit"></i> </a>
+       
+       <a data-property_id="{{ $item->id }}" id="delete-record" class="btn btn-inverse-danger delete-record"> Bin <i data-feather="trash"></i></a>
+
+ 
                         </td>
                       </tr>
                      @endforeach
@@ -150,13 +156,13 @@
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'Delete This Data?',
+                text: 'Move to Bin This Data?',
                 icon: 'warning',
                 color: '#000000',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, Trash it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -166,7 +172,7 @@
                             console.log(response);
                                 Swal.fire({
                                     icon: "success",
-                                    title: "Deleted",
+                                    title: "Move To Trash",
                                     text: response.success,
                                     showConfirmButton: false,
                                     timer: 2000
@@ -175,7 +181,7 @@
                                 if (response.error) {
                                 Swal.fire({
                                     icon: "error",
-                                    title: "Unable to delete",
+                                    title: "Unable to Trash",
                                     text: response.error,
                                     showConfirmButton: false,
                                     timer: 2000,

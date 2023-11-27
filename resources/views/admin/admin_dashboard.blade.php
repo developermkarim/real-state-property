@@ -18,6 +18,10 @@
   <!-- End fonts -->
 
 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
 
